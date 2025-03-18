@@ -6,51 +6,33 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Check if user is already logged in
   useEffect(() => {
-    axios
-      .get("/api/auth/me", { withCredentials: true })
-      .then((res) => setUser(res.data))
-      .catch(() => setUser(null));
+    const fetchUser = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const { data } = await axios.get("http://localhost:5000/api/auth/me", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setUser(data);
+        } catch {
+          localStorage.removeItem("token");
+        }
+      }
+    };
+    fetchUser();
   }, []);
 
-  // Login function
   const login = async (email, password) => {
-    try {
-      const res = await axios.post(
-        "/api/auth/login",
-        { email, password },
-        { withCredentials: true }
-      );
-      setUser(res.data.user);
-    } catch (err) {
-      console.error(err.response.data.message);
-    }
+    const { data } = await axios.post("http://localhost:5000/api/auth/login", { email, password });
+    localStorage.setItem("token", data.token);
+    setUser(data);
   };
 
-  // Signup function
-  const signup = async (name, email, password) => {
-    try {
-      const res = await axios.post(
-        "/api/auth/signup",
-        { name, email, password },
-        { withCredentials: true }
-      );
-      setUser(res.data.user);
-    } catch (err) {
-      console.error(err.response.data.message);
-    }
-  };
-
-  // Logout function
-  const logout = async () => {
-    await axios.get("/api/auth/logout", { withCredentials: true });
+  const logout = () => {
+    localStorage.removeItem("token");
     setUser(null);
   };
 
-  return (
-    <AuthContext.Provider value={{ user, login, signup, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
 };

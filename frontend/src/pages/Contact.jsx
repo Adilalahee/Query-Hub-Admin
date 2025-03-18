@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { FacebookShareButton, TwitterShareButton } from "react-share";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -25,6 +26,7 @@ export default function Contact() {
   };
 
   return (
+    <>
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
         <h2 className="text-2xl font-bold mb-4 text-center">Contact Us</h2>
@@ -65,5 +67,11 @@ export default function Contact() {
         </form>
       </div>
     </div>
+    
+
+<FacebookShareButton url={window.location.href}><button>Facebook</button></FacebookShareButton>
+<TwitterShareButton url={window.location.href}><button>Twitter</button></TwitterShareButton>
+
+    </>
   );
 }

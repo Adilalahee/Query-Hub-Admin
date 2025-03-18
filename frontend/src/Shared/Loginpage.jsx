@@ -5,13 +5,20 @@ import { AuthContext } from "../Authentication/AuthContext";
 export default function Loginpage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(""); // To store any error messages
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    await login(email, password);
-    navigate("/admin"); // Redirect to admin panel after login
+    setError(""); // Reset error message on each login attempt
+
+    try {
+      await login(email, password);  // Attempt to log in
+      navigate("/admin");  // Redirect to the admin panel after successful login
+    } catch (err) {
+      setError("Invalid credentials or server error! Please try again."); // Set error message
+    }
   };
 
   return (
@@ -35,6 +42,7 @@ export default function Loginpage() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}  {/* Display error message */}
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition"

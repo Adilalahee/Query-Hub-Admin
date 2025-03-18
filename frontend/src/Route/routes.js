@@ -1,15 +1,16 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import AdminDashboard from "./pages/AdminDashboard";
-import ContactPage from "./pages/ContactPage";
+import Contact from "../pages/Contact";
+import Loginpage from "../Shared/Loginpage";
+import Admin from "../pages/Admin";
+
 
 export default function AppRoutes() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<ContactPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/" element={<Contact></Contact>} />
+        <Route path="/login" element={<Loginpage></Loginpage>} />
+        <Route path="/admin" element={<Admin></Admin>} />
       </Routes>
     </Router>
   );

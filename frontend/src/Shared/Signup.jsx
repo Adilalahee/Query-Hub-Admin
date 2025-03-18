@@ -1,18 +1,26 @@
-import { useState, useContext } from "react";
+import axios from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../Authentication/AuthContext";
 
 export default function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { signup } = useContext(AuthContext);
-  const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    await signup(name, email, password);
-    navigate("/admin"); // Redirect to admin panel after signup
+
+    try {
+      // Include email in the signup request
+      const response = await axios.post('http://localhost:5000/api/auth/signup', {
+        name,  // send username as well
+        email,     // send email to backend
+        password,  // send password
+      });
+      console.log('Signup successful:', response.data);
+    } catch (err) {
+      console.error('Signup error:', err);
+    }
   };
 
   return (
