@@ -1,18 +1,18 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-import AdminDashboard from "./pages/AdminDashboard";
-import ContactPage from "./pages/ContactPage";
+import Signup from "./Shared/Signup";
+import Loginpage from "./Shared/Loginpage";
+import Contact from "./pages/Contact";
+import PrivateRoute from "./Route/Privateroute";
+import Admin from "./pages/Admin";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<ContactPage />} />
-          <Route path="/signup" element={<SignupPage></SignupPage>} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/" element={<Contact></Contact>} />
+          <Route path="/signup" element={<Signup></Signup>} />
+          <Route path="/login" element={<Loginpage></Loginpage>} />
+          <Route path="/admin" element={<PrivateRoute><Admin></Admin></PrivateRoute>} />
         </Routes>
       </Router>
     </AuthProvider>
