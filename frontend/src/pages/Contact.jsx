@@ -17,60 +17,55 @@ export default function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Update the URL to your backend API
-      await axios.post("http://localhost:5000/api/contact", formData);
+      await axios.post("/api/contact", formData);
       setStatus("Message sent successfully!");
       setFormData({ name: "", email: "", message: "" });
-  
-      // Clear status after 3 seconds
-      setTimeout(() => setStatus(null), 3000);
     } catch (error) {
       setStatus("Failed to send message. Try again.");
-      setTimeout(() => setStatus(null), 3000);
     }
   };
-  
 
   return (
     <>
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
-        <h2 className="text-2xl font-bold mb-4 text-center">Contact Us</h2>
-        {status && <p className="text-center text-green-500">{status}</p>}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            name="name"
-            placeholder="Your Name"
-            className="w-full p-3 border rounded"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Your Email"
-            className="w-full p-3 border rounded"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <textarea
-            name="message"
-            placeholder="Your Message"
-            className="w-full p-3 border rounded h-24"
-            value={formData.message}
-            onChange={handleChange}
-            required
-          />
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition"
-          >
-            Send Message
-          </button>
-        </form>
+ <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+      <div className="bg-white rounded-lg shadow-lg flex w-full max-w-5xl overflow-hidden relative">
+        {/* Left Column - Branding + Form */}
+        <div className="flex-1 p-10 relative">
+          {/* Slanted Background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-700 clip-path-left"></div>
+
+          {/* Content */}
+          <div className="relative z-10">
+            <h2 className="text-3xl font-bold text-white">CyberCraft <span className="text-yellow-300">Bangladesh</span></h2>
+            <p className="text-gray-200 mt-2">Where your creativity thrives</p>
+
+            {/* Contact Form */}
+            <form className="space-y-4 mt-6">
+              <div>
+                <label className="block text-white">Full Name</label>
+                <input type="text" placeholder="Your full name" className="w-full p-3 rounded bg-white border" required />
+              </div>
+              <div>
+                <label className="block text-white">Email</label>
+                <input type="email" placeholder="example@gmail.com" className="w-full p-3 rounded bg-white border" required />
+              </div>
+              <div>
+                <label className="block text-white">Message</label>
+                <textarea placeholder="Write message" className="w-full p-3 rounded bg-white border h-24" required></textarea>
+              </div>
+              <button className="w-full bg-blue-700 text-white py-3 rounded-lg hover:bg-blue-800 transition">
+                Submit
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Right Column - Image */}
+        <div className="flex-1 flex items-center justify-center bg-blue-300 relative">
+          {/* Slanted Background */}
+          <div className="absolute inset-0 bg-gradient-to-l from-blue-500 to-blue-700 clip-path-right"></div>
+          <img src="/path-to-image.png" alt="Illustration" className="w-3/4 relative z-10" />
+        </div>
       </div>
     </div>
     
