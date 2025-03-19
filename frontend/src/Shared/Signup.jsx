@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const [name, setName] = useState("");
@@ -10,16 +9,26 @@ export default function Signup() {
   const handleSignup = async (e) => {
     e.preventDefault();
 
+    console.log('Signup data:', { name, email, password });
+
     try {
-      // Include email in the signup request
       const response = await axios.post('http://localhost:5000/api/auth/signup', {
-        name,  // send username as well
-        email,     // send email to backend
-        password,  // send password
+        name,
+        email,
+        password,
       });
+
       console.log('Signup successful:', response.data);
     } catch (err) {
-      console.error('Signup error:', err);
+      if (err.response) {
+        // Server responded with an error
+        console.error('Error response:', err.response);
+        alert(err.response.data.message);  // Assuming backend sends a meaningful message
+      } else {
+        // Network or other errors
+        console.error('Signup error:', err.message);
+        alert('An error occurred during signup. Please try again.');
+      }
     }
   };
 

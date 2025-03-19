@@ -17,13 +17,19 @@ export default function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/contact", formData);
+      // Update the URL to your backend API
+      await axios.post("http://localhost:5000/api/contact", formData);
       setStatus("Message sent successfully!");
       setFormData({ name: "", email: "", message: "" });
+  
+      // Clear status after 3 seconds
+      setTimeout(() => setStatus(null), 3000);
     } catch (error) {
       setStatus("Failed to send message. Try again.");
+      setTimeout(() => setStatus(null), 3000);
     }
   };
+  
 
   return (
     <>

@@ -1,14 +1,19 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import User from "../models/user.js";
 import generateToken from "../utils/generatetoken.js";
+import User from "../models/user.js";
 
 const router = express.Router();
 
 // User Signup
 router.post('/signup', async (req, res) => {
-  const { name, email, password } = req.body;  // Ensure all fields are destructured
+  const { name, email, password } = req.body;
+
+  // Basic validation for email and password
+  if (!email || !password || !name) {
+    return res.status(400).json({ message: "Please fill in all fields" });
+  }
 
   try {
     // Check if user already exists
@@ -22,11 +27,12 @@ router.post('/signup', async (req, res) => {
 
     // Create new user
     const newUser = new User({
-      name,     // Ensure 'name' is being passed correctly
-      email,    // Ensure 'email' is being passed correctly
+      name,
+      email,
       password: hashedPassword,
     });
 
+    console.log(newUser);
     // Save user to the database
     await newUser.save();
 
@@ -41,16 +47,16 @@ router.post('/signup', async (req, res) => {
 // User Login
 router.post("/login", async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
+    const { email, password } = req.body; // Using email instead of username
+    const user = await User.findOne({ email });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ message: "Invalid username or password" });
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
     res.json({
       _id: user._id,
-      username: user.username,
+      email: user.email,
       token: generateToken(user._id),
     });
   } catch (err) {
