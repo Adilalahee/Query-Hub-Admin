@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const EmployeesTable = () => {
-  const [employees, setEmployees] = useState([]);
+const Admin = () => {
+  const [contacts, setContacts] = useState([]);
   const [selected, setSelected] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    fetchEmployees();
+    fetchContacts();
   }, []);
 
-  const fetchEmployees = async () => {
+  const fetchContacts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/employee/employees", { withCredentials: true });
-      setEmployees(res.data);
+      const res = await axios.get("http://localhost:5000/api/contact", { withCredentials: true });
+      setContacts(res.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
     }
@@ -26,7 +26,7 @@ const EmployeesTable = () => {
   const handleDelete = async () => {
     try {
       await axios.post("http://localhost:5000/api/employee/delete", { ids: selected }, { withCredentials: true });
-      fetchEmployees();
+      fetchContacts();
       setSelected([]);
     } catch (error) {
       console.error("Error deleting employees:", error);
@@ -35,7 +35,7 @@ const EmployeesTable = () => {
 
   const handleDownloadPDF = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/employee/download-pdf", {
+      const response = await axios.get("http://localhost:5000/api/contact/download-pdf", {
         responseType: "blob",
       });
       const blob = new Blob([response.data], { type: "application/pdf" });
@@ -53,7 +53,7 @@ const EmployeesTable = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold text-gray-700">Employees</h2>
+        <h2 className="text-2xl font-semibold text-gray-700">Contacts</h2>
         <div className="flex items-center space-x-4">
           <input
             type="text"
@@ -71,26 +71,20 @@ const EmployeesTable = () => {
           <thead className="bg-gray-100">
             <tr>
               <th className="px-4 py-2 text-left text-gray-600">No.</th>
-              <th className="px-4 py-2 text-left text-gray-600">Employee ID</th>
-              <th className="px-4 py-2 text-left text-gray-600">Name</th>
               <th className="px-4 py-2 text-left text-gray-600">Email</th>
-              <th className="px-4 py-2 text-left text-gray-600">Department</th>
-              <th className="px-4 py-2 text-left text-gray-600">Designation</th>
+              <th className="px-4 py-2 text-left text-gray-600">message</th>
               <th className="px-4 py-2 text-left text-gray-600">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {employees.map((employee, index) => (
-              <tr key={employee.id} className="border-t">
+            {contacts.map((contact, index) => (
+              <tr key={contact.id} className="border-t">
                 <td className="px-4 py-2 text-gray-600">{index + 1}</td>
-                <td className="px-4 py-2 text-blue-600">{employee.employeeID}</td>
-                <td className="px-4 py-2 text-gray-600">{employee.name}</td>
-                <td className="px-4 py-2 text-gray-600">{employee.email}</td>
-                <td className="px-4 py-2 text-gray-600">{employee.department}</td>
-                <td className="px-4 py-2 text-gray-600">{employee.designation}</td>
+                <td className="px-4 py-2 text-gray-600">{contact.email}</td>
+                <td className="px-4 py-2 text-gray-600">{contact.message}</td>
                 <td className="px-4 py-2 text-gray-600 flex space-x-2">
-                  <button onClick={() => handleSelect(employee.id)} className="p-2 bg-gray-300 rounded-md">
-                    {selected.includes(employee.id) ? "✅" : "⬜"}
+                  <button onClick={() => handleSelect(contact.id)} className="p-2 bg-gray-300 rounded-md">
+                    {selected.includes(contact.id) ? "✅" : "⬜"}
                   </button>
                   <span onClick={handleDownloadPDF} className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer">
                     ⬇️ PDF
@@ -108,4 +102,4 @@ const EmployeesTable = () => {
   );
 };
 
-export default EmployeesTable;
+export default Admin;
